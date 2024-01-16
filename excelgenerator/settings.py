@@ -72,6 +72,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Agrega el dominio de tu aplicación React
+    "https://brayan1951.github.io",  # Agrega el dominio de tu aplicación React
     # ... otros dominios permitidos ...
 ]
 CORS_ALLOW_METHODS = [
