@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 import openpyxl 
 from openpyxl.styles import Border, Side
 
-# exportar
+# exportar excel
 
 def cargar_plantilla():
     if getattr(sys, 'frozen', False):
@@ -118,6 +118,61 @@ def obtener_data(data):
     # print(data)
     return data
 
+# Obtener clientes
+def cargar_clientes():
+    columns_filter=["codigo","ruc","nombre","credito"]
+    if getattr(sys, 'frozen', False):
+            script_dir = sys._MEIPASS
+    else:
+
+        script_dir = os.path.abspath(".")
+        resource_name = './excelapp/cotizador.xlsx'
+
+        # Obtener la ruta del recurso empaquetado
+        resource_path = os.path.join(script_dir, resource_name)
+    clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
+    return clientes
+def buscar_clientes(cliente):
+    temp= str.lower(cliente)
+    data_cliente=cargar_clientes()
+    filter_cliente=data_cliente['nombre'].str.lower().str.startswith(temp)
+    clientes=data_cliente[filter_cliente]
+    lista_clientes=clientes.to_dict(orient='records')
+    return lista_clientes
+
+
+
+# buscar productos
+
+def cargar_productos():
+    columns_filter=["codigo_sap","codigo","descripcion","marca"]
+    if getattr(sys, 'frozen', False):
+            script_dir = sys._MEIPASS
+    else:
+
+        script_dir = os.path.abspath(".")
+        resource_name = './excelapp/cotizador.xlsx'
+
+        # Obtener la ruta del recurso empaquetado
+        resource_path = os.path.join(script_dir, resource_name)
+    productos=pd.read_excel(resource_path,"ARTICULOS",usecols=columns_filter)
+    return productos
+
+def buscar_productos(codigo):
+    temp= str.lower(codigo)
+    data_productos=cargar_productos()
+    filter_productos=data_productos['codigo'].str.lower().str.startswith(temp,na=False)
+    productos=data_productos[filter_productos]
+    lista_productos=productos.to_dict(orient='records')
+    return lista_productos
+
+
+
+
+
+
+
+
 
 # Create your views here.
 def hello(request):
@@ -136,16 +191,34 @@ def generar_excel(request):
         data = json.loads(request.body.decode('utf-8'))
         print(data)
         df = obtener_data(data)
-        print(df)
+        # print(df)
         return actualizar_plantilla(df)
-        # print("pasaste el post")
-        # # archivo_temporal = "temp.xlsx"
-        # # df.to_excel(archivo_temporal, index=False)
-
-        # response = HttpResponse(open(libro, 'rb').read(), content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        # response['Content-Disposition'] = 'attachment; filename=temp.xlsx'
-        # return response
-         
+    
+    
+    
+def obtener_clientes(request):
+    if request.method=='GET':
+        print("pasaste el get de obtener clienteS")
+        return HttpResponse("estas en el gett")
+    else:
+        data = json.loads(request.body.decode('utf-8'))
+        data_clientes=buscar_clientes(str(data["codigo"]))
+        # data_clientes=cargar_clientes(data["codigo"])
+        # print(data["codigo"])         
+        # print(data_clientes)
+        return HttpResponse(data_clientes)
+        
+def obtener_productos(request):
+    if request.method=='GET':
+        print("pasaste el get de obtener productos")
+        return HttpResponse("estas en el gett productos")
+    else:
+        data = json.loads(request.body.decode('utf-8'))
+        data_productos=buscar_productos(str(data["codigo"]))
+        # data_productos=cargar_clientes(data["codigo"])
+        # print(data["codigo"])         
+        # print(data_productos)
+        return HttpResponse(data_productos)
         
         
     
