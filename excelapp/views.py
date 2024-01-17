@@ -128,6 +128,7 @@ def obtener_data(data):
 
 # Obtener clientes
 def cargar_clientes():
+    print("definicion de colums")
     columns_filter=["codigo","ruc","nombre","credito"]
     if getattr(sys, 'frozen', False):
             script_dir = sys._MEIPASS
@@ -138,6 +139,7 @@ def cargar_clientes():
 
         # Obtener la ruta del recurso empaquetado
         resource_path = os.path.join(script_dir, resource_name)
+    print(resource_name)
     print("pasaste por here antes carga")
     clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
     print("pasaste por here  carga")
