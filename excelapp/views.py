@@ -7,7 +7,8 @@ import pandas as pd
 from openpyxl import load_workbook
 import openpyxl 
 from openpyxl.styles import Border, Side
-
+from django.http import JsonResponse
+import numpy as np
 # exportar excel
 
 def cargar_plantilla():
@@ -104,15 +105,22 @@ def actualizar_plantilla(df_coti):
 def obtener_data(data):
     data=pd.DataFrame(data)
     # data_modificada
-    data["precio"]=pd.to_numeric(data["precio"])
+    data['cantidad'] = pd.to_numeric(data['cantidad'], errors='coerce')
+    data['precio'] = pd.to_numeric(data['precio'], errors='coerce')
+    # data["precio"]=pd.to_numeric(data["precio"])
     data["indice"]=data.index+1
-    data["marca"]=" " 
+    # data["marca"]=" " 
     # data["precio sin igv"]= round(data["precio"] /(1.18),2)
     data["precio sin igv"] = data["precio"].apply(lambda x: round(x / 1.18, 2) if pd.notna(x) and x != 0 else x)
 
-    data["Total_sin_igv"]=    round( data["cantidad"]*data["precio"]/(1.18),2)
+    # data["Total_sin_igv"]=    round( data["cantidad"]*data["precio"]/(1.18),2)
     # data["Total_sin_igv"] = data.apply(lambda row: round(row["cantidad"] * row["precio"] / 1.18, 2) if pd.notna(row["cantidad"]) and pd.notna(row["precio"]) and row["cantidad"] != 0 and row["precio"] != 0 else np.nan, axis=1)
-
+    data["Total_sin_igv"] = data.apply(
+        lambda row: round(row["cantidad"] * row["precio"] / 1.18, 2) 
+        if pd.notna(row["cantidad"]) and pd.notna(row["precio"]) and row["cantidad"] != 0 and row["precio"] != 0 
+        else np.nan, 
+        axis=1
+    )
     
     data = data[['indice', 'codigo','descripcion','marca','cantidad','precio sin igv','precio','Total_sin_igv']]
     # print(data)
@@ -138,9 +146,16 @@ def buscar_clientes(cliente):
     filter_cliente=data_cliente['nombre'].str.lower().str.startswith(temp)
     clientes=data_cliente[filter_cliente]
     lista_clientes=clientes.to_dict(orient='records')
+    # lista_clientes=clientes.values.tolist()
     return lista_clientes
 
-
+def buscar_ruc(ruc):
+    data_cliente=cargar_clientes()
+    data_cliente['ruc'] = data_cliente['ruc'].astype(str)
+    filter_cliente=data_cliente['ruc'].str.startswith(ruc)
+    clientes=data_cliente[filter_cliente]
+    lista_clientes=clientes.to_dict(orient='records')
+    return lista_clientes
 
 # buscar productos
 
@@ -189,7 +204,7 @@ def generar_excel(request):
         
         
         data = json.loads(request.body.decode('utf-8'))
-        print(data)
+        # print(data)
         df = obtener_data(data)
         # print(df)
         return actualizar_plantilla(df)
@@ -206,7 +221,16 @@ def obtener_clientes(request):
         # data_clientes=cargar_clientes(data["codigo"])
         # print(data["codigo"])         
         # print(data_clientes)
-        return HttpResponse(data_clientes)
+        return JsonResponse({'clientes':data_clientes})
+        # return HttpResponse("estas en el post")
+        
+def obtener_cliente_ruc(request,ruc):
+    # codigo = request.GET.get('ruc', None)
+    data=buscar_ruc(str(ruc))
+    print(ruc)
+  
+    return JsonResponse({'cliente':data})
+        
         
 def obtener_productos(request):
     if request.method=='GET':
@@ -218,7 +242,7 @@ def obtener_productos(request):
         # data_productos=cargar_clientes(data["codigo"])
         # print(data["codigo"])         
         # print(data_productos)
-        return HttpResponse(data_productos)
+        return JsonResponse({'productos':data_productos})
         
         
     
