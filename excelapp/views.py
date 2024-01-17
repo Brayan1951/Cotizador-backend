@@ -138,7 +138,9 @@ def cargar_clientes():
 
         # Obtener la ruta del recurso empaquetado
         resource_path = os.path.join(script_dir, resource_name)
+    print("pasaste por here antes carga")
     clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
+    print("pasaste por here  carga")
     return clientes
 def buscar_clientes(cliente):
     
