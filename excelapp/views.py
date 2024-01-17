@@ -141,11 +141,14 @@ def cargar_clientes():
     clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
     return clientes
 def buscar_clientes(cliente):
+    print("pasaste por here")
+    
     temp= str.lower(cliente)
     data_cliente=cargar_clientes()
     filter_cliente=data_cliente['nombre'].str.lower().str.startswith(temp)
     clientes=data_cliente[filter_cliente]
     lista_clientes=clientes.to_dict(orient='records')
+    print("pasaste por here 2")
     # lista_clientes=clientes.values.tolist()
     return lista_clientes
 
@@ -210,7 +213,6 @@ def generar_excel(request):
     
     
 def obtener_clientes(request):
-    print("pasaste por here")
     if request.method=='GET':
         print("pasaste el get de obtener clienteS")
         return HttpResponse("estas en el gett")
