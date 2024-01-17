@@ -2,6 +2,7 @@ import sys
 import os
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.conf import settings
 import json
 import pandas as pd
 from openpyxl import load_workbook
@@ -141,7 +142,9 @@ def cargar_clientes():
     resource_name = 'COTIZADOR.xlsx'
 
         # Obtener la ruta del recurso empaquetado
-    resource_path = os.path.join(script_dir,'./excelapp', resource_name)
+    
+    # resource_path = os.path.join(script_dir,'./excelapp', resource_name)
+    resource_path = os.path.join(settings.BASE_DIR,'./excelapp', resource_name)
     print(resource_path)
     print("pasaste por here antes carga")
     clientes=pd.read_excel(resource_path,sheet_name="LC",usecols=columns_filter)
@@ -179,7 +182,7 @@ def cargar_productos():
     else:
 
         script_dir = os.path.abspath(".")
-        resource_name = './excelapp/cotizador.xlsx'
+        resource_name = './excelapp/COTIZADOR.xlsx'
 
         # Obtener la ruta del recurso empaquetado
         resource_path = os.path.join(script_dir, resource_name)
