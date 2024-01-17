@@ -204,9 +204,7 @@ def generar_excel(request):
         
         
         data = json.loads(request.body.decode('utf-8'))
-        # print(data)
         df = obtener_data(data)
-        # print(df)
         return actualizar_plantilla(df)
     
     
