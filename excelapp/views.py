@@ -141,7 +141,7 @@ def cargar_clientes():
     resource_name = 'cotizador.xlsx'
 
         # Obtener la ruta del recurso empaquetado
-    resource_path = os.path.join(script_dir,'excelapp', resource_name)
+    resource_path = os.path.join(script_dir,'./excelapp', resource_name)
     print(resource_path)
     print("pasaste por here antes carga")
     libro=load_workbook(resource_path)
