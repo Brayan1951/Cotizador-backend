@@ -214,14 +214,21 @@ def obtener_clientes(request):
         print("pasaste el get de obtener clienteS")
         return HttpResponse("estas en el gett")
     else:
-        data = json.loads(request.body.decode('utf-8'))
-        data_clientes=buscar_clientes(str(data["codigo"]))
-        # data_clientes=cargar_clientes(data["codigo"])
-        # print(data["codigo"])         
-        # print(data_clientes)
-        return JsonResponse({'clientes':data_clientes})
-        # return HttpResponse("estas en el post")
-        
+        try:
+            
+            data = json.loads(request.body.decode('utf-8'))
+            data_clientes=buscar_clientes(str(data["codigo"]))
+            # data_clientes=cargar_clientes(data["codigo"])
+            # print(data["codigo"])         
+            # print(data_clientes)
+            return JsonResponse({'clientes':data_clientes})
+            # return HttpResponse("estas en el post")
+        except Exception:
+            print(Exception)
+            # return Exception
+            return HttpResponse(Exception)
+            
+            
 def obtener_cliente_ruc(request,ruc):
     # codigo = request.GET.get('ruc', None)
     data=buscar_ruc(str(ruc))
