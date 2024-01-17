@@ -23,4 +23,5 @@ urlpatterns = [
     path('excel/', include('excelapp.urls')),
     
 ]
+# pip freeze > requirements.txt   
 # python manage.py runserver
