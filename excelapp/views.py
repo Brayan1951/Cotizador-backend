@@ -210,6 +210,7 @@ def generar_excel(request):
     
     
 def obtener_clientes(request):
+    print("pasaste por here")
     if request.method=='GET':
         print("pasaste el get de obtener clienteS")
         return HttpResponse("estas en el gett")
@@ -224,7 +225,7 @@ def obtener_clientes(request):
             return JsonResponse({'clientes':data_clientes})
             # return HttpResponse("estas en el post")
         except Exception:
-            print(Exception)
+            print(str(Exception))
             # return Exception
             return HttpResponse(Exception)
             
