@@ -131,11 +131,11 @@ def cargar_clientes():
     print("definicion de colums")
     columns_filter=["codigo","ruc","nombre","credito"]
     if getattr(sys, 'frozen', False):
-            script_dir = sys._MEIPASS
+        script_dir = sys._MEIPASS
     else:
 
         script_dir = os.path.abspath(".")
-    resource_name = './excelapp/cotizador.xlsx'
+    resource_name = 'excelapp/cotizador.xlsx'
 
         # Obtener la ruta del recurso empaquetado
     resource_path = os.path.join(script_dir, resource_name)
