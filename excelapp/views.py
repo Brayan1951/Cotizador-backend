@@ -141,7 +141,12 @@ def cargar_clientes():
         resource_path = os.path.join(script_dir, resource_name)
     print(resource_name)
     print("pasaste por here antes carga")
-    clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
+    try:
+        clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
+    except Exception:
+        print(Exception)
+        print(str(Exception))
+        
     print("pasaste por here  carga")
     return clientes
 def buscar_clientes(cliente):
@@ -225,6 +230,7 @@ def obtener_clientes(request):
         try:
             
             data = json.loads(request.body.decode('utf-8'))
+            print(data)
             data_clientes=buscar_clientes(str(data["codigo"]))
             # data_clientes=cargar_clientes(data["codigo"])
             # print(data["codigo"])         
