@@ -141,14 +141,15 @@ def cargar_clientes():
     clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
     return clientes
 def buscar_clientes(cliente):
-    print("pasaste por here")
     
     temp= str.lower(cliente)
     data_cliente=cargar_clientes()
+    print("pasaste por here")
     filter_cliente=data_cliente['nombre'].str.lower().str.startswith(temp)
-    clientes=data_cliente[filter_cliente]
-    lista_clientes=clientes.to_dict(orient='records')
     print("pasaste por here 2")
+    clientes=data_cliente[filter_cliente]
+    print("pasaste por here 3")
+    lista_clientes=clientes.to_dict(orient='records')
     # lista_clientes=clientes.values.tolist()
     return lista_clientes
 
