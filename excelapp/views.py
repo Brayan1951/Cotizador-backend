@@ -21,6 +21,8 @@ def cargar_plantilla():
 
     # Obtener la ruta del recurso empaquetado
     resource_path = os.path.join(script_dir, resource_name)
+    print(resource_path)
+    
     libro=load_workbook(resource_path)
     libro.active
     cotizador=libro["Hoja1"]
@@ -135,12 +137,16 @@ def cargar_clientes():
     else:
 
         script_dir = os.path.abspath(".")
-    resource_name = 'excelapp/cotizador.xlsx'
+    # resource_name = './excelapp/cotizador.xlsx'
+    resource_name = 'cotizador.xlsx'
 
         # Obtener la ruta del recurso empaquetado
-    resource_path = os.path.join(script_dir, resource_name)
+    resource_path = os.path.join(script_dir,'excelapp', resource_name)
     print(resource_path)
     print("pasaste por here antes carga")
+    libro=load_workbook(resource_path)
+    libro.active
+    # clientes=pd.read_excel(libro,sheet_name="LC",usecols=columns_filter)
     clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
   
         
@@ -224,20 +230,19 @@ def obtener_clientes(request):
         print("pasaste el get de obtener clienteS")
         return HttpResponse("estas en el gett")
     else:
-        try:
+        data = json.loads(request.body.decode('utf-8'))
+        print(data)
+        data_clientes=buscar_clientes(str(data["codigo"]))
+        return JsonResponse({'clientes':data_clientes})
+        # try:
             
-            data = json.loads(request.body.decode('utf-8'))
-            print(data)
-            data_clientes=buscar_clientes(str(data["codigo"]))
-            # data_clientes=cargar_clientes(data["codigo"])
-            # print(data["codigo"])         
-            # print(data_clientes)
-            return JsonResponse({'clientes':data_clientes})
-            # return HttpResponse("estas en el post")
-        except Exception:
-            print(str(Exception))
-            # return Exception
-            return HttpResponse(Exception)
+        #     data = json.loads(request.body.decode('utf-8'))
+        #     print(data)
+        #     data_clientes=buscar_clientes(str(data["codigo"]))
+        #     return JsonResponse({'clientes':data_clientes})
+        # except Exception:
+        #     print(str(Exception))
+        #     return HttpResponse(Exception)
             
             
 def obtener_cliente_ruc(request,ruc):
