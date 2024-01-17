@@ -141,11 +141,8 @@ def cargar_clientes():
     resource_path = os.path.join(script_dir, resource_name)
     print(resource_name)
     print("pasaste por here antes carga")
-    try:
-        clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
-    except Exception:
-        print(Exception)
-        print(str(Exception))
+    clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
+  
         
     print("pasaste por here  carga")
     return clientes
