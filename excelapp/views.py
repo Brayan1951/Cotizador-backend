@@ -144,10 +144,10 @@ def cargar_clientes():
     resource_path = os.path.join(script_dir,'./excelapp', resource_name)
     print(resource_path)
     print("pasaste por here antes carga")
-    libro=load_workbook(resource_path)
-    libro.active
+    # libro=load_workbook(resource_path)
+    # libro.active
     # clientes=pd.read_excel(libro,sheet_name="LC",usecols=columns_filter)
-    clientes=pd.read_excel(resource_path,"LC",usecols=columns_filter)
+    clientes=pd.read_excel(resource_path,sheet_name="LC",usecols=columns_filter)
   
         
     print("pasaste por here  carga")
