@@ -135,10 +135,10 @@ def cargar_clientes():
     else:
 
         script_dir = os.path.abspath(".")
-        resource_name = './excelapp/cotizador.xlsx'
+    resource_name = './excelapp/cotizador.xlsx'
 
         # Obtener la ruta del recurso empaquetado
-        resource_path = os.path.join(script_dir, resource_name)
+    resource_path = os.path.join(script_dir, resource_name)
     print(resource_name)
     print("pasaste por here antes carga")
     try:
