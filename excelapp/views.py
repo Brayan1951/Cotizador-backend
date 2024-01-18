@@ -30,7 +30,18 @@ def cargar_plantilla():
     
     return libro,cotizador
 
-def actualizar_plantilla(df_coti):
+def actualizar_plantilla(df_kam,df_cliente,df_coti):
+    print(df_kam)
+    
+    nombre_kam=df_kam["nombre"]
+    telefono_kam=df_kam["telefono"]
+    correo_kam=df_kam["correo"]
+    area_kam=df_kam["area"]
+    
+    ruc=df_cliente["ruc"]
+    nombre=df_cliente["nombre"]
+    direccion=df_cliente["direccion"]
+    
     libro,temp_plantilla=cargar_plantilla()
     # Establecer un estilo de borde
     borde = Border(left=Side(style='thin'), 
@@ -70,6 +81,33 @@ def actualizar_plantilla(df_coti):
     for index in range(3):
         temp_plantilla.cell(row=7+index,column=last_fila).border=borde
         
+        
+        
+        
+    # agregar datos del cliente
+    
+    temp_plantilla[f'B{10}']=nombre
+    temp_plantilla.merge_cells(f'B{10}:E{10}')
+    temp_plantilla[f'B{12}']=ruc
+    temp_plantilla.merge_cells(f'B{12}:E{12}')
+    temp_plantilla[f'B{14}']=direccion
+    temp_plantilla.merge_cells(f'B{14}:E{14}')
+    
+    # datos kam
+    
+    temp_plantilla[f'J{19}']=nombre_kam
+    temp_plantilla.merge_cells(f'J{19}:L{19}')
+    temp_plantilla[f'J{20}']=telefono_kam
+    temp_plantilla.merge_cells(f'J{20}:L{20}')
+    temp_plantilla[f'J{21}']=correo_kam
+    temp_plantilla.merge_cells(f'J{21}:L{21}')
+    temp_plantilla[f'J{22}']=area_kam
+    temp_plantilla.merge_cells(f'J{22}:L{22}')
+    
+    
+    
+    
+    
     
     # temp_plantilla[f'J{last_fila}']='Monto sin IGV'
     temp_plantilla[f'L{last_fila+1}']=suma_sing_igv
@@ -92,6 +130,7 @@ def actualizar_plantilla(df_coti):
     temp_plantilla.merge_cells(f'B{last_fila+14}:E{last_fila+14}')
     temp_plantilla.merge_cells(f'B{last_fila+15}:E{last_fila+15}')
     temp_plantilla.merge_cells(f'B{last_fila+16}:E{last_fila+16}')
+    
     
     
     
@@ -220,8 +259,12 @@ def generar_excel(request):
         
         
         data = json.loads(request.body.decode('utf-8'))
-        df = obtener_data(data)
-        return actualizar_plantilla(df)
+        
+        df_kam = data["ejecutivo"]
+        df_cliente = data["cliente"]
+        df_productos = obtener_data(data["productos"])
+        print(df_cliente)
+        return actualizar_plantilla(df_kam,df_cliente,df_productos)
     
     
     
@@ -231,7 +274,6 @@ def obtener_clientes(request):
         return HttpResponse("estas en el gett")
     else:
         data = json.loads(request.body.decode('utf-8'))
-        print(data)
         data_clientes=buscar_clientes(str(data["codigo"]))
         return JsonResponse({'clientes':data_clientes})
         # try:
